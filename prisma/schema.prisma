@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Patient {
+  id        String   @id @default(uuid())
+  customId  String   @unique // The "Patient ID/Namn" entered by user
+  createdAt DateTime @default(now())
+  sessions  Session[]
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  date      DateTime @default(now())
+  ageGroup  String   // "0-6" or "7-18"
+  birthYear String?  // Patient's birth year
+  patientId String
+  patient   Patient  @relation(fields: [patientId], references: [id])
+  
+  // Clinical Data
+  usageTimeLeft   String?
+  usageTimeRight  String?
+  estimatedUsageTimeLeft   String?
+  estimatedUsageTimeRight  String?
+  hnsGradeLeft   String?
+  hnsGradeRight  String?
+  hnsTypeLeft    String?
+  hnsTypeRight   String?
+  
+  // Checkboxes
+  basnedsattningLeft Boolean @default(false)
+  basnedsattningRight Boolean @default(false)
+  diskantnedsattningLeft Boolean @default(false)
+  diskantnedsattningRight Boolean @default(false)
+  flatLossLeft       Boolean @default(false)
+  flatLossRight      Boolean @default(false)
+  
+  // Hearing Aid
+  haTypeLeft         String?
+  haTypeRight        String?
+
+  // Situational Data (Stored as JSON for flexibility between age groups)
+  situationalData String // JSON string of the table rows
+
+  createdAt DateTime @default(now())
+}
