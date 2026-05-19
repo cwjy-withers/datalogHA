@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import db from "@/lib/db";
-import { EditSessionForm, splitTime } from "./EditSessionForm";
+import { splitTime } from "@/lib/time";
+import { EditSessionForm } from "./EditSessionForm";
 import type { FormValues } from "@/lib/schemas";
 
 interface Props {
