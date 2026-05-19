@@ -1,17 +1,9 @@
 import Link from "next/link";
-import { format } from "date-fns";
-import { PlusCircle, FileText, History, FileSpreadsheet, BarChart3 } from "lucide-react";
+import { PlusCircle, BarChart3 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/mode-toggle";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { SessionsTable } from "@/components/SessionsTable";
 import db from "@/lib/db";
 
 // Force dynamic rendering to fetch fresh data
@@ -88,54 +80,7 @@ export default async function Home() {
                         </Button> */}
           </div>
 
-          <div className="rounded-md border bg-background">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Datum</TableHead>
-                  <TableHead>Patient ID</TableHead>
-                  <TableHead>Åldersgrupp</TableHead>
-                  <TableHead>Användning (V/H)</TableHead>
-                  <TableHead className="hidden md:table-cell">HNS Grad (V/H)</TableHead>
-                  <TableHead className="hidden md:table-cell">Hörapparat</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {sessions.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={6} className="h-24 text-center">
-                      Inga sessioner hittades.
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  sessions.map((session) => (
-                    <TableRow key={session.id}>
-                      <TableCell className="font-medium">
-                        {format(session.date, 'yyyy-MM-dd')}
-                      </TableCell>
-                      <TableCell>{session.patient.customId}</TableCell>
-                      <TableCell>{session.ageGroup}</TableCell>
-                      <TableCell>
-                        {session.usageTimeLeft || '-'} / {session.usageTimeRight || '-'} h
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        <div className="flex flex-col text-xs text-muted-foreground">
-                          <span>V: {session.hnsGradeLeft || '-'}</span>
-                          <span>H: {session.hnsGradeRight || '-'}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        <div className="flex flex-col text-xs text-muted-foreground">
-                          <span>V: {session.haTypeLeft || '-'}</span>
-                          <span>H: {session.haTypeRight || '-'}</span>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </div>
+          <SessionsTable sessions={sessions.map(s => ({ ...s, date: s.date.toISOString() }))} />
         </div>
       </main>
     </div>
