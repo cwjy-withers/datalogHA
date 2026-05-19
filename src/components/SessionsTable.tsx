@@ -53,11 +53,8 @@ export function SessionsTable({ sessions }: Props) {
                   </TableCell>
                   <TableCell>{session.patient.customId}</TableCell>
                   <TableCell>{session.ageGroup}</TableCell>
-                  <TableCell>
-                    <div className="flex flex-col text-xs text-muted-foreground">
-                      <span>V: {formatHHMM(session.usageTimeLeft)}</span>
-                      <span>H: {formatHHMM(session.usageTimeRight)}</span>
-                    </div>
+                  <TableCell className="text-muted-foreground">
+                    {formatHHMM(session.usageTimeLeft)} / {formatHHMM(session.usageTimeRight)}
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
                     <div className="flex flex-col text-xs text-muted-foreground">
