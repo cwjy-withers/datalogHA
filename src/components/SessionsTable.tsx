@@ -29,8 +29,8 @@ export function SessionsTable({ sessions }: Props) {
               <TableHead>Datum</TableHead>
               <TableHead>Patient ID</TableHead>
               <TableHead>Åldersgrupp</TableHead>
-              <TableHead>Användning (V/H)</TableHead>
-              <TableHead className="hidden md:table-cell">HNS Grad (V/H)</TableHead>
+              <TableHead>Användning (H/V)</TableHead>
+              <TableHead className="hidden md:table-cell">HNS Grad (H/V)</TableHead>
               <TableHead className="hidden md:table-cell">Hörapparat</TableHead>
             </TableRow>
           </TableHeader>
@@ -54,18 +54,21 @@ export function SessionsTable({ sessions }: Props) {
                   <TableCell>{session.patient.customId}</TableCell>
                   <TableCell>{session.ageGroup}</TableCell>
                   <TableCell className="text-muted-foreground">
-                    {formatHHMM(session.usageTimeLeft)} / {formatHHMM(session.usageTimeRight)}
-                  </TableCell>
-                  <TableCell className="hidden md:table-cell">
                     <div className="flex flex-col text-xs text-muted-foreground">
-                      <span>V: {session.hnsGradeLeft || "-"}</span>
-                      <span>H: {session.hnsGradeRight || "-"}</span>
+                      <span>H: {formatHHMM(session.usageTimeRight)}</span>
+                      <span>V: {formatHHMM(session.usageTimeLeft)}</span>
                     </div>
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
                     <div className="flex flex-col text-xs text-muted-foreground">
-                      <span>V: {session.haTypeLeft || "-"}</span>
+                      <span>H: {session.hnsGradeRight || "-"}</span>
+                      <span>V: {session.hnsGradeLeft || "-"}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    <div className="flex flex-col text-xs text-muted-foreground">
                       <span>H: {session.haTypeRight || "-"}</span>
+                      <span>V: {session.haTypeLeft || "-"}</span>
                     </div>
                   </TableCell>
                 </TableRow>
