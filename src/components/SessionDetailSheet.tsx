@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect } from "react";
-import { X, User, Calendar, Ear, Clock, Activity, CheckCircle2 } from "lucide-react";
+import { X, User, Ear, Clock, Activity, CheckCircle2, Pencil } from "lucide-react";
+import Link from "next/link";
 import { format } from "date-fns";
 import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
 
 export type SessionDetail = {
   id: string;
@@ -154,13 +156,21 @@ export function SessionDetailSheet({ session, onClose }: Props) {
                   {format(new Date(session.date), "d MMMM yyyy")} · {session.ageGroup} år
                 </p>
               </div>
-              <button
-                onClick={onClose}
-                className="ml-4 mt-1 rounded-md p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
-                aria-label="Stäng"
-              >
-                <X className="h-5 w-5" />
-              </button>
+              <div className="flex items-center gap-2 ml-4 mt-1">
+                <Button asChild size="sm" variant="outline">
+                  <Link href={`/edit-session/${session.id}`}>
+                    <Pencil className="h-3.5 w-3.5 mr-1.5" />
+                    Redigera
+                  </Link>
+                </Button>
+                <button
+                  onClick={onClose}
+                  className="rounded-md p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+                  aria-label="Stäng"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
             </div>
 
             {/* Scrollable content */}
