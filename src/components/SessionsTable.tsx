@@ -11,6 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { SessionDetailSheet, type SessionDetail } from "@/components/SessionDetailSheet";
+import { formatHHMM } from "@/lib/time";
 
 interface Props {
   sessions: SessionDetail[];
@@ -53,7 +54,7 @@ export function SessionsTable({ sessions }: Props) {
                   <TableCell>{session.patient.customId}</TableCell>
                   <TableCell>{session.ageGroup}</TableCell>
                   <TableCell>
-                    {session.usageTimeLeft || "-"} / {session.usageTimeRight || "-"} h
+                    {formatHHMM(session.usageTimeLeft)} / {formatHHMM(session.usageTimeRight)}
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
                     <div className="flex flex-col text-xs text-muted-foreground">

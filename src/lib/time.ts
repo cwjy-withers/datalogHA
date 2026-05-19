@@ -7,3 +7,14 @@ export function splitTime(val: string | null | undefined): { hours: string; minu
     const m = Math.round((n - h) * 60);
     return { hours: h > 0 ? String(h) : "", minutes: m > 0 ? String(m) : "" };
 }
+
+/** Formats a decimal hour string as "H:MM" (e.g. "1.50" → "1:30"). Returns "—" if empty. */
+export function formatHHMM(val: string | null | undefined): string {
+    if (!val || val === "") return "—";
+    const n = parseFloat(val);
+    if (isNaN(n)) return "—";
+    const h = Math.floor(n);
+    const m = Math.round((n - h) * 60);
+    return `${h}:${String(m).padStart(2, "0")}`;
+}
+
