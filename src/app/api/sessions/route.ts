@@ -60,6 +60,7 @@ export async function POST(req: Request) {
             Åldersgrupp: data.ageGroup,
             Födelseår: data.birthYear,
 
+            Time_Left: data.usageTimeLeft,
             Time_Right: data.usageTimeRight,
             Est_Time_L: data.estimatedUsageTimeLeft,
             Est_Time_R: data.estimatedUsageTimeRight,
