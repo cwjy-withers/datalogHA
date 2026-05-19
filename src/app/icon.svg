@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4F46E5" />
+      <stop offset="100%" stop-color="#06B6D4" />
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" rx="60" fill="url(#grad)" />
+  <!-- A minimal stylized ear / hearing aid shape in white -->
+  <path d="M 128 56 C 88 56 64 88 64 120 C 64 160 88 168 88 200 C 88 212 96 220 108 220 C 120 220 128 212 128 200 C 128 176 112 168 112 144 C 112 120 120 96 144 96 C 160 96 172 108 172 128 C 172 152 148 160 148 184" fill="none" stroke="white" stroke-width="24" stroke-linecap="round" />
+  <!-- Sound waves -->
+  <path d="M 188 88 C 210 110 210 146 188 168 M 216 60 C 252 96 252 160 216 196" fill="none" stroke="white" stroke-width="20" stroke-linecap="round" />
+</svg>
