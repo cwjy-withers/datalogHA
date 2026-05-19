@@ -1,7 +1,7 @@
 "use client";
 
 import { useFormContext, useWatch } from "react-hook-form";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
     FormControl,
     FormField,
@@ -23,8 +23,14 @@ import { Separator } from "@/components/ui/separator";
 
 export function Step3ClinicalData() {
     const { control, setValue } = useFormContext();
+    const isSymmetrical = useWatch({ control, name: "symmetricalHearingLoss" });
+
     const hnsGradeLeft = useWatch({ control, name: "hnsGradeLeft" });
     const hnsGradeRight = useWatch({ control, name: "hnsGradeRight" });
+    const hnsTypeLeft = useWatch({ control, name: "hnsTypeLeft" });
+    const basnedsattningLeft = useWatch({ control, name: "basnedsattningLeft" });
+    const diskantnedsattningLeft = useWatch({ control, name: "diskantnedsattningLeft" });
+    const flatLossLeft = useWatch({ control, name: "flatLossLeft" });
 
     useEffect(() => {
         if (hnsGradeLeft === "Normal (<20)") {
@@ -43,6 +49,24 @@ export function Step3ClinicalData() {
             setValue("flatLossRight", false);
         }
     }, [hnsGradeRight, setValue]);
+
+    useEffect(() => {
+        if (isSymmetrical) {
+            setValue("hnsGradeRight", hnsGradeLeft);
+            setValue("hnsTypeRight", hnsTypeLeft);
+            setValue("basnedsattningRight", basnedsattningLeft);
+            setValue("diskantnedsattningRight", diskantnedsattningLeft);
+            setValue("flatLossRight", flatLossLeft);
+        }
+    }, [
+        isSymmetrical,
+        hnsGradeLeft,
+        hnsTypeLeft,
+        basnedsattningLeft,
+        diskantnedsattningLeft,
+        flatLossLeft,
+        setValue
+    ]);
 
     return (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -266,7 +290,30 @@ export function Step3ClinicalData() {
 
             {/* Hearing Loss (HNS) */}
             <section className="space-y-4">
-                <h3 className="text-lg font-semibold">Grad av hörselnedsättning (HNS)</h3>
+                <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-semibold">Grad av hörselnedsättning (HNS)</h3>
+                    <FormField
+                        control={control}
+                        name="symmetricalHearingLoss"
+                        render={({ field }) => (
+                            <FormItem className="flex items-center space-x-2 space-y-0">
+                                <FormControl>
+                                    <Checkbox
+                                        id="symmetrical-hns"
+                                        checked={field.value}
+                                        onCheckedChange={field.onChange}
+                                    />
+                                </FormControl>
+                                <label
+                                    htmlFor="symmetrical-hns"
+                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                >
+                                    Liksidig hörselnedsättning
+                                </label>
+                            </FormItem>
+                        )}
+                    />
+                </div>
                 <div className="grid grid-cols-2 gap-4">
                     {/* Left Ear HNS */}
                     <div className="space-y-4">
@@ -388,7 +435,7 @@ export function Step3ClinicalData() {
                                     <FormLabel>Grad</FormLabel>
                                     <Select onValueChange={field.onChange} value={field.value ?? ""}>
                                         <FormControl>
-                                            <SelectTrigger>
+                                            <SelectTrigger disabled={isSymmetrical}>
                                                 <SelectValue placeholder="Välj grad" />
                                             </SelectTrigger>
                                         </FormControl>
@@ -413,7 +460,7 @@ export function Step3ClinicalData() {
                                     <FormLabel>Typ</FormLabel>
                                     <Select onValueChange={field.onChange} value={field.value ?? ""}>
                                         <FormControl>
-                                            <SelectTrigger disabled={hnsGradeRight === "Normal (<20)"}>
+                                            <SelectTrigger disabled={isSymmetrical || hnsGradeRight === "Normal (<20)"}>
                                                 <SelectValue placeholder="Välj typ" />
                                             </SelectTrigger>
                                         </FormControl>
@@ -439,7 +486,7 @@ export function Step3ClinicalData() {
                                             <Checkbox
                                                 checked={field.value}
                                                 onCheckedChange={field.onChange}
-                                                disabled={hnsGradeRight === "Normal (<20)"}
+                                                disabled={isSymmetrical || hnsGradeRight === "Normal (<20)"}
                                             />
                                         </FormControl>
                                         <div className="leading-none">
@@ -457,7 +504,7 @@ export function Step3ClinicalData() {
                                             <Checkbox
                                                 checked={field.value}
                                                 onCheckedChange={field.onChange}
-                                                disabled={hnsGradeRight === "Normal (<20)"}
+                                                disabled={isSymmetrical || hnsGradeRight === "Normal (<20)"}
                                             />
                                         </FormControl>
                                         <div className="leading-none">
@@ -475,7 +522,7 @@ export function Step3ClinicalData() {
                                             <Checkbox
                                                 checked={field.value}
                                                 onCheckedChange={field.onChange}
-                                                disabled={hnsGradeRight === "Normal (<20)"}
+                                                disabled={isSymmetrical || hnsGradeRight === "Normal (<20)"}
                                             />
                                         </FormControl>
                                         <div className="leading-none">

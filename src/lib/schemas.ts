@@ -41,6 +41,8 @@ export const formSchema = z.object({
 
     haTypeLeft: z.string().optional(),
     haTypeRight: z.string().optional(),
+
+    symmetricalHearingLoss: z.boolean().default(false),
 });
 
 export type FormValues = z.infer<typeof formSchema>;

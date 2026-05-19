@@ -33,6 +33,7 @@ model Session {
   hnsTypeRight   String?
   
   // Checkboxes
+  symmetricalHearingLoss Boolean @default(false)
   basnedsattningLeft Boolean @default(false)
   basnedsattningRight Boolean @default(false)
   diskantnedsattningLeft Boolean @default(false)

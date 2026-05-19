@@ -29,6 +29,7 @@ type RawSession = {
   flatLossRight: boolean;
   haTypeLeft: string | null;
   haTypeRight: string | null;
+  symmetricalHearingLoss: boolean;
   situationalData: string;
   createdAt: string;
   patient: { customId: string };
@@ -221,7 +222,9 @@ export function AnalysisPageClient({
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
   const [selectedHnsGrades, setSelectedHnsGrades] = useState<string[]>([]);
+  const [selectedHnsTypes, setSelectedHnsTypes] = useState<string[]>([]);
   const [selectedHaTypes, setSelectedHaTypes] = useState<string[]>([]);
+  const [selectedSymmetrical, setSelectedSymmetrical] = useState<string[]>([]);
 
   // ── Derive unique filter options from all sessions ──
   const allHnsGrades = useMemo(() => {
@@ -243,6 +246,15 @@ export function AnalysisPageClient({
       const bi = HNS_ORDER.indexOf(b);
       return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
     });
+  }, [sessions]);
+
+  const allHnsTypes = useMemo(() => {
+    const types = new Set<string>();
+    sessions.forEach((s) => {
+      if (s.hnsTypeLeft && s.hnsTypeLeft !== "---") types.add(s.hnsTypeLeft);
+      if (s.hnsTypeRight && s.hnsTypeRight !== "---") types.add(s.hnsTypeRight);
+    });
+    return Array.from(types).sort();
   }, [sessions]);
 
   const allHaTypes = useMemo(() => {
@@ -278,6 +290,14 @@ export function AnalysisPageClient({
         if (!match) return false;
       }
 
+      // HNS type filter
+      if (selectedHnsTypes.length > 0) {
+        const match =
+          selectedHnsTypes.includes(s.hnsTypeLeft ?? "") ||
+          selectedHnsTypes.includes(s.hnsTypeRight ?? "");
+        if (!match) return false;
+      }
+
       // HA type filter
       if (selectedHaTypes.length > 0) {
         const match =
@@ -286,9 +306,15 @@ export function AnalysisPageClient({
         if (!match) return false;
       }
 
+      // Symmetrical hearing loss filter
+      if (selectedSymmetrical.length > 0) {
+        const isSymmetrical = s.symmetricalHearingLoss ? "Ja" : "Nej";
+        if (!selectedSymmetrical.includes(isSymmetrical)) return false;
+      }
+
       return true;
     });
-  }, [sessions, ageGroupFilter, dateFrom, dateTo, selectedHnsGrades, selectedHaTypes]);
+  }, [sessions, ageGroupFilter, dateFrom, dateTo, selectedHnsGrades, selectedHnsTypes, selectedHaTypes, selectedSymmetrical]);
 
   // ── Compute aggregated stats from filtered sessions ──
   const data = useMemo(
@@ -305,10 +331,16 @@ export function AnalysisPageClient({
   if (dateTo)
     activeFilters.push({ label: `Till: ${dateTo}`, clear: () => setDateTo("") });
   selectedHnsGrades.forEach((g) =>
-    activeFilters.push({ label: `HNS: ${g}`, clear: () => setSelectedHnsGrades((prev) => prev.filter((v) => v !== g)) })
+    activeFilters.push({ label: `HNS Grad: ${g}`, clear: () => setSelectedHnsGrades((prev) => prev.filter((v) => v !== g)) })
+  );
+  selectedHnsTypes.forEach((t) =>
+    activeFilters.push({ label: `HNS Typ: ${t}`, clear: () => setSelectedHnsTypes((prev) => prev.filter((v) => v !== t)) })
   );
   selectedHaTypes.forEach((t) =>
     activeFilters.push({ label: `HA: ${t}`, clear: () => setSelectedHaTypes((prev) => prev.filter((v) => v !== t)) })
+  );
+  selectedSymmetrical.forEach((v) =>
+    activeFilters.push({ label: `Liksidig HNS: ${v}`, clear: () => setSelectedSymmetrical((prev) => prev.filter((o) => o !== v)) })
   );
 
   const clearAll = () => {
@@ -316,7 +348,9 @@ export function AnalysisPageClient({
     setDateFrom("");
     setDateTo("");
     setSelectedHnsGrades([]);
+    setSelectedHnsTypes([]);
     setSelectedHaTypes([]);
+    setSelectedSymmetrical([]);
   };
 
   // ── Stat cards ──
@@ -429,7 +463,17 @@ export function AnalysisPageClient({
             />
           )}
 
-          {/* Row 3: HA type */}
+          {/* Row 3: HNS Type */}
+          {allHnsTypes.length > 0 && (
+            <CheckboxGroup
+              label="Typ av hörselnedsättning"
+              options={allHnsTypes}
+              selected={selectedHnsTypes}
+              onChange={setSelectedHnsTypes}
+            />
+          )}
+
+          {/* Row 4: HA type */}
           {allHaTypes.length > 0 && (
             <CheckboxGroup
               label="Hörapparattyp"
@@ -438,6 +482,14 @@ export function AnalysisPageClient({
               onChange={setSelectedHaTypes}
             />
           )}
+
+          {/* Row 5: Symmetrical HNS */}
+          <CheckboxGroup
+            label="Liksidig hörselnedsättning"
+            options={["Ja", "Nej"]}
+            selected={selectedSymmetrical}
+            onChange={setSelectedSymmetrical}
+          />
 
           {/* Active chips */}
           {activeFilters.length > 0 && (
