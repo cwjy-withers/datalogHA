@@ -36,21 +36,27 @@ export function Step1PatientInfo() {
     const ageGroup = watch("ageGroup");
     const currentBirthYear = watch("birthYear");
 
-    const currentYear = new Date().getFullYear(); // e.g. 2026
+    const dateValue = watch("date");
+    // Use the session's date to calculate age ranges so that editing old sessions doesn't invalidate the birth year
+    const referenceYear = dateValue ? new Date(dateValue).getFullYear() : new Date().getFullYear();
 
     // Calculate allowed years based on age group.
-    // 0-6 years means birth year is between (currentYear) and (currentYear - 6)
-    // 7-18 years means birth year is between (currentYear - 7) and (currentYear - 18)
+    // 0-6 years means birth year is between (referenceYear) and (referenceYear - 6)
+    // 7-18 years means birth year is between (referenceYear - 7) and (referenceYear - 18)
     const birthYears = ageGroup === "0-6"
-        ? Array.from({ length: 7 }, (_, i) => (currentYear - i).toString()) // 2026 to 2020
-        : Array.from({ length: 12 }, (_, i) => (currentYear - 7 - i).toString()); // 2019 to 2008
+        ? Array.from({ length: 7 }, (_, i) => (referenceYear - i).toString()) 
+        : Array.from({ length: 12 }, (_, i) => (referenceYear - 7 - i).toString()); 
 
-    // Reset birth year if it's no longer valid for the newly selected age group
+    // Reset birth year if it's no longer valid for the newly selected age group/date
     useEffect(() => {
-        if (currentBirthYear && !birthYears.includes(currentBirthYear)) {
+        const allowedYears = ageGroup === "0-6"
+            ? Array.from({ length: 7 }, (_, i) => (referenceYear - i).toString())
+            : Array.from({ length: 12 }, (_, i) => (referenceYear - 7 - i).toString());
+        
+        if (currentBirthYear && !allowedYears.includes(currentBirthYear)) {
             setValue("birthYear", "");
         }
-    }, [ageGroup, currentBirthYear, birthYears, setValue]);
+    }, [ageGroup, currentBirthYear, referenceYear, setValue]);
 
     return (
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
