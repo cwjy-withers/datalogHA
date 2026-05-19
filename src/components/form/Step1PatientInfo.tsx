@@ -29,10 +29,11 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export function Step1PatientInfo() {
     const { control, watch, setValue } = useFormContext();
+    const [isCalendarOpen, setIsCalendarOpen] = useState(false);
     const ageGroup = watch("ageGroup");
     const currentBirthYear = watch("birthYear");
 
@@ -83,7 +84,7 @@ export function Step1PatientInfo() {
                     render={({ field }) => (
                         <FormItem className="flex flex-col">
                             <FormLabel>Datum</FormLabel>
-                            <Popover>
+                            <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                                 <PopoverTrigger asChild>
                                     <FormControl>
                                         <Button
@@ -106,7 +107,10 @@ export function Step1PatientInfo() {
                                     <Calendar
                                         mode="single"
                                         selected={field.value}
-                                        onSelect={field.onChange}
+                                        onSelect={(date) => {
+                                            field.onChange(date);
+                                            setIsCalendarOpen(false);
+                                        }}
                                         disabled={(date) =>
                                             date > new Date() || date < new Date("1900-01-01")
                                         }

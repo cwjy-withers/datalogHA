@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { useFormContext } from "react-hook-form";
 import {
     FormControl,
@@ -50,27 +51,34 @@ export function Step2Situation() {
                     </TableHeader>
                     <TableBody>
                         {situations.map((situation) => (
-                            <TableRow key={situation}>
-                                <TableCell className="font-medium">{situation}</TableCell>
-                                <TableCell>
-                                    <FormField
-                                        control={control}
-                                        name={`situationalRatings.${situation}`}
-                                        render={({ field }) => (
-                                            <FormItem className="space-y-0">
-                                                <FormControl>
-                                                    <SegmentedControl
-                                                        options={frequencyOptions}
-                                                        value={field.value}
-                                                        onChange={field.onChange}
-                                                    />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                </TableCell>
-                            </TableRow>
+                            <React.Fragment key={situation}>
+                                <TableRow>
+                                    <TableCell className="font-medium">{situation}</TableCell>
+                                    <TableCell>
+                                        <FormField
+                                            control={control}
+                                            name={`situationalRatings.${situation}`}
+                                            render={({ field }) => (
+                                                <FormItem className="space-y-0">
+                                                    <FormControl>
+                                                        <SegmentedControl
+                                                            options={frequencyOptions}
+                                                            value={field.value}
+                                                            onChange={field.onChange}
+                                                        />
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+                                    </TableCell>
+                                </TableRow>
+                                {situation === "Vid läggdags" && (
+                                    <TableRow className="h-8 border-0 hover:bg-transparent pointer-events-none">
+                                        <TableCell colSpan={2} className="p-0 border-b" />
+                                    </TableRow>
+                                )}
+                            </React.Fragment>
                         ))}
                     </TableBody>
                 </Table>
