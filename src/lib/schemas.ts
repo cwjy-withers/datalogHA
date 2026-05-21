@@ -73,4 +73,4 @@ export const situationsAge7to18 = [
     "Vid fritidsaktivitet",
 ];
 
-export const frequencyOptions = ["Aldrig", "Sällan", "Ibland", "Alltid", "Vet ej"];
+export const frequencyOptions = ["Aldrig", "Sällan", "Ibland", "Ofta", "Alltid", "Vet ej"];

@@ -266,6 +266,7 @@ export function SessionDetailSheet({ session, onClose }: Props) {
                         <Row key={situation} label={situation} value={
                           <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
                             rating === "Alltid" ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400" :
+                            rating === "Ofta" ? "bg-lime-500/15 text-lime-600 dark:text-lime-400" :
                             rating === "Ibland" ? "bg-amber-500/15 text-amber-600 dark:text-amber-400" :
                             rating === "Sällan" ? "bg-orange-500/15 text-orange-600 dark:text-orange-400" :
                             rating === "Aldrig" ? "bg-red-500/15 text-red-600 dark:text-red-400" :

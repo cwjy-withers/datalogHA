@@ -71,11 +71,11 @@ function BarChart({
 
 // ── Situational percentage table ──────────────────────────────────────────────
 
-// 5 clearly distinguishable colour families: red / orange / yellow / green / grey
 const FREQ_PALETTE: Record<string, { bg: string; text: string; bar: string }> = {
   Aldrig:   { bg: "hsl(0   80% 94%)", text: "hsl(0   70% 35%)", bar: "hsl(0   70% 55%)" },
   Sällan:   { bg: "hsl(30  85% 93%)", text: "hsl(30  70% 35%)", bar: "hsl(30  75% 55%)" },
   Ibland:   { bg: "hsl(50  85% 92%)", text: "hsl(50  65% 30%)", bar: "hsl(50  75% 50%)" },
+  Ofta:     { bg: "hsl(85  80% 92%)", text: "hsl(85  60% 30%)", bar: "hsl(85  70% 45%)" },
   Alltid:   { bg: "hsl(140 70% 92%)", text: "hsl(140 60% 28%)", bar: "hsl(140 60% 45%)" },
   "Vet ej": { bg: "hsl(220 30% 93%)", text: "hsl(220 20% 40%)", bar: "hsl(220 20% 60%)" },
 };
